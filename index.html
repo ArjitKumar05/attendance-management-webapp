@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduTrack Pro - Smart Attendance System</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="app-container">
+        <aside class="sidebar">
+            <div class="logo">
+                <i class="fa-solid fa-graduation-cap"></i>
+                <span>EduTrack <b>Pro</b></span>
+            </div>
+            <ul class="nav-links">
+                <li class="active" data-tab="dashboard">
+                    <i class="fa-solid fa-chart-pie"></i>
+                    <span>Dashboard</span>
+                </li>
+                <li data-tab="attendance">
+                    <i class="fa-solid fa-clipboard-user"></i>
+                    <span>Mark Attendance</span>
+                </li>
+                <li data-tab="students">
+                    <i class="fa-solid fa-users"></i>
+                    <span>Students Directory</span>
+                </li>
+                <li data-tab="defaulters">
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+                    <span>Defaulter List (<75%)</span>
+                </li>
+                <li data-tab="scanner">
+                    <i class="fa-solid fa-qrcode"></i>
+                    <span>Smart QR / Bio Scan</span>
+                </li>
+            </ul>
+            <div class="sidebar-footer">
+                <button id="theme-toggle" class="btn-secondary">
+                    <i class="fa-solid fa-moon"></i> <span>Dark Mode</span>
+                </button>
+                <button id="reset-data" class="btn-danger-outline">
+                    <i class="fa-solid fa-rotate-right"></i> Reset Demo Data
+                </button>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <header class="top-bar">
+                <div class="header-left">
+                    <h2 id="page-title">Analytics Dashboard</h2>
+                    <p id="current-date-display"></p>
+                </div>
+                <div class="header-right">
+                    <div class="subject-selector">
+                        <label for="global-subject"><i class="fa-solid fa-book"></i> Subject:</label>
+                        <select id="global-subject">
+                            <option value="DSA">Data Structures (CS-301)</option>
+                            <option value="WebDev">Web Technology (CS-302)</option>
+                            <option value="DBMS">Database Systems (CS-303)</option>
+                            <option value="AI">Artificial Intelligence (CS-304)</option>
+                        </select>
+                    </div>
+                    <div class="date-selector">
+                        <label for="attendance-date"><i class="fa-regular fa-calendar"></i> Date:</label>
+                        <input type="date" id="attendance-date">
+                    </div>
+                    <button id="export-csv" class="btn-primary">
+                        <i class="fa-solid fa-file-csv"></i> Export CSV
+                    </button>
+                </div>
+            </header>
+
+            <section id="dashboard" class="tab-content active">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon blue"><i class="fa-solid fa-user-graduate"></i></div>
+                        <div class="stat-details">
+                            <h3>Total Students</h3>
+                            <p id="stat-total">0</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon green"><i class="fa-solid fa-user-check"></i></div>
+                        <div class="stat-details">
+                            <h3>Present Today</h3>
+                            <p id="stat-present">0</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon red"><i class="fa-solid fa-user-xmark"></i></div>
+                        <div class="stat-details">
+                            <h3>Absent Today</h3>
+                            <p id="stat-absent">0</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon orange"><i class="fa-solid fa-bell"></i></div>
+                        <div class="stat-details">
+                            <h3>Defaulters (<75%)</h3>
+                            <p id="stat-defaulters">0</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="charts-container">
+                    <div class="chart-card">
+                        <h3>Today's Attendance Distribution</h3>
+                        <div class="canvas-wrapper">
+                            <canvas id="todayChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="chart-card">
+                        <h3>Overall Attendance Overview (%)</h3>
+                        <div class="canvas-wrapper">
+                            <canvas id="overallChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="attendance" class="tab-content">
+                <div class="controls-bar">
+                    <div class="search-box">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        <input type="text" id="search-attendance" placeholder="Search by name or roll no...">
+                    </div>
+                    <div class="bulk-actions">
+                        <button id="mark-all-present" class="btn-success"><i class="fa-solid fa-check-double"></i> Mark All Present</button>
+                        <button id="mark-all-absent" class="btn-danger"><i class="fa-solid fa-xmark"></i> Mark All Absent</button>
+                    </div>
+                </div>
+
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Roll No</th>
+                                <th>Student Name</th>
+                                <th>Course / Branch</th>
+                                <th>Overall %</th>
+                                <th>Today's Status</th>
+                                <th>Quick Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="attendance-tbody">
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section id="students" class="tab-content">
+                <div class="controls-bar">
+                    <div class="search-box">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        <input type="text" id="search-student-dir" placeholder="Search directory...">
+                    </div>
+                    <button id="open-add-modal" class="btn-primary">
+                        <i class="fa-solid fa-plus"></i> Add New Student
+                    </button>
+                </div>
+
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Roll No</th>
+                                <th>Name</th>
+                                <th>Branch</th>
+                                <th>Classes Attended</th>
+                                <th>Attendance %</th>
+                                <th>Status Badge</th>
+                                <th>Delete</th>
+                            </tr>
+                        </thead>
+                        <tbody id="students-tbody">
+
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section id="defaulters" class="tab-content">
+                <div class="alert-banner">
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+                    <div>
+                        <h4>75% Attendance Criteria Warning</h4>
+                        <p>Below listed students have overall attendance less than 75% and are at risk of being debarred from semester exams.</p>
+                    </div>
+                </div>
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Roll No</th>
+                                <th>Student Name</th>
+                                <th>Parent Contact</th>
+                                <th>Current %</th>
+                                <th>Shortage</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="defaulters-tbody">
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section id="scanner" class="tab-content">
+                <div class="scanner-wrapper">
+                    <div class="scanner-box">
+                        <div class="scanner-Select">
+                            <i class="fa-solid fa-camera"></i> Live Smart Scanner Simulation
+                        </div>
+                        <div class="camera-viewport">
+                            <div class="laser"></div>
+                            <i class="fa-solid fa-qrcode qr-placeholder"></i>
+                            <p id="scan-status-text">Waiting for Student ID / QR Code...</p>
+                        </div>
+                        <div class="scanner-controls">
+                            <select id="simulate-student-select">
+                            </select>
+                            <button id="trigger-scan-btn" class="btn-primary">
+                                <i class="fa-solid fa-bolt"></i> Simulate Scan (Mark Present)
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="scan-logs">
+                        <h3><i class="fa-solid fa-clock-rotate-left"></i> Recent Live Scans</h3>
+                        <ul id="scan-log-list">
+                            <li class="empty-log">No scans recorded in this session yet.</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <div id="student-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fa-solid fa-user-plus"></i> Add New Student</h3>
+                <span class="close-modal">&times;</span>
+            </div>
+            <form id="add-student-form">
+                <div class="form-group">
+                    <label>Roll Number *</label>
+                    <input type="text" id="stu-roll" required placeholder="e.g., CS2026011">
+                </div>
+                <div class="form-group">
+                    <label>Full Name *</label>
+                    <input type="text" id="stu-name" required placeholder="e.g., Aarav Sharma">
+                </div>
+                <div class="form-group">
+                    <label>Branch / Course *</label>
+                    <select id="stu-branch">
+                        <option value="B.Tech CSE">B.Tech CSE</option>
+                        <option value="B.Tech AI/ML">B.Tech AI/ML</option>
+                        <option value="BCA">BCA</option>
+                        <option value="MCA">MCA</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Parent Phone Number *</label>
+                    <input type="tel" id="stu-phone" required placeholder="e.g., +91 9876543210">
+                </div>
+                <button type="submit" class="btn-primary w-100">Save Student</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="toast-container"></div>
+
+    <script src="script.js"></script>
+</body>
+</html>
