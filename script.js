@@ -1,13 +1,12 @@
-// Initial Dummy Students Data
 const defaultStudents = [
-    { id: 1, roll: "CS2026001", name: "Kanak Gupta", branch: "B.Tech CSE", phone: "+91 9876543210", totalClasses: 20, attended: 18 },
-    { id: 2, roll: "CS2026002", name: "Arun Kumar", branch: "B.Tech AI/ML", phone: "+91 9876543211", totalClasses: 20, attended: 19 },
-    { id: 3, roll: "CS2026003", name: "Anush Raj", branch: "B.Tech CSE", phone: "+91 9876543212", totalClasses: 20, attended: 12 }, // Defaulter
-    { id: 4, roll: "CS2026004", name: "Ananya Gupta", branch: "BCA", phone: "+91 9876543213", totalClasses: 20, attended: 16 },
-    { id: 5, roll: "CS2026005", name: "Anurag", branch: "B.Tech CSE", phone: "+91 9876543214", totalClasses: 20, attended: 11 }, // Defaulter
-    { id: 6, roll: "CS2026006", name: "Sneha Reddy", branch: "MCA", phone: "+91 9876543215", totalClasses: 20, attended: 20 },
-    { id: 7, roll: "CS2026007", name: "Arjit Kumar", branch: "B.Tech AI/ML", phone: "+91 9876543216", totalClasses: 20, attended: 14 }, // Defaulter
-    { id: 8, roll: "CS2026008", name: "Devansh Mishra", branch: "B.Tech CSE", phone: "+91 9876543217", totalClasses: 20, attended: 17 }
+    { id: 1, roll: "CS2026001", name: "Kanak Gupta", branch: "B.Tech CSE", phone: "+91 9090909090", totalClasses: 20, attended: 18 },
+    { id: 2, roll: "CS2026002", name: "Arun Kumar", branch: "B.Tech AI/ML", phone: "+91 9090909091", totalClasses: 20, attended: 19 },
+    { id: 3, roll: "CS2026003", name: "Anush Raj", branch: "B.Tech CSE", phone: "+91 9090909092", totalClasses: 20, attended: 12 }, // Defaulter
+    { id: 4, roll: "CS2026004", name: "Ananya Gupta", branch: "BCA", phone: "+91 9090909093", totalClasses: 20, attended: 16 },
+    { id: 5, roll: "CS2026005", name: "Anurag", branch: "B.Tech CSE", phone: "+91 9090909094", totalClasses: 20, attended: 11 }, // Defaulter
+    { id: 6, roll: "CS2026006", name: "Sneha Reddy", branch: "MCA", phone: "+91 9090909095", totalClasses: 20, attended: 20 },
+    { id: 7, roll: "CS2026007", name: "Arjit Kumar", branch: "B.Tech AI/ML", phone: "+91 9090909096", totalClasses: 20, attended: 14 }, // Defaulter
+    { id: 8, roll: "CS2026008", name: "Devansh Mishra", branch: "B.Tech CSE", phone: "+91 9090909097", totalClasses: 20, attended: 17 }
 ];
 
 let students = JSON.parse(localStorage.getItem('edutrack_students')) || defaultStudents;
