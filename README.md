@@ -87,4 +87,5 @@ For educational use. Add a `LICENSE` file if you want to define formal reuse and
 ---
 
 ⭐ If you find this project useful, consider giving the repository a star!
+Trigger pages Rebuild
 
